@@ -1,21 +1,16 @@
 {
-  "name": "tateti-random",
+  "name": "conversor-arabigo-romano",
   "version": "1.0.0",
-  "main": "tateti-random.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node tateti-random.js",
     "test": "jest"
   },
-  "dependencies": {
-    "express": "^4.18.2"
-  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
   "devDependencies": {
-    "jest": "^29.7.0"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/.vercel/"
-    ]
+    "jest": "^30.2.0"
   }
 }

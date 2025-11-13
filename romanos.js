@@ -1,48 +1,36 @@
-﻿const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 3000;
+﻿// src/conversor.js
 
-// Romanos a Arabigos
-app.get('/r2a', (req, res) => {
-  const romanNumeral = req.query.roman;
-  if (!romanNumeral) {
-    return res.status(400).json({ error: 'Parametro roman requerido.' });
-  }
+function arabigoARomano(num) {
+    if (!Number.isInteger(num) || num <= 0 || num >= 4000) {
+        throw new Error("El número debe ser entero y entre 1 y 3999");
+    }
 
-  const arabicNumber = romanToArabic(romanNumeral);
-  if (arabicNumber === null) {
-    return res.status(400).json({ error: 'Numero romano invalido.' });
-  }
+    const valores = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+    const simbolos = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"];
 
-  return res.json({ arabic: arabicNumber });
-});
-
-// Arabigos a Romanos
-app.get('/a2r', (req, res) => {
-  const arabicNumber = parseInt(req.query.arabic, 10);
-  if (isNaN(arabicNumber)) {
-    return res.status(400).json({ error: 'Parametro arabic requerido.' });
-  }
-
-  const romanNumeral = arabicToRoman(arabicNumber);
-  if (romanNumeral === null) {
-    return res.status(400).json({ error: 'Numero arabico invalido.' });
-  }
-
-  return res.json({ roman: romanNumeral });
-});
-
-function romanToArabic(roman) {
+    let resultado = "";
+    for (let i = 0; i < valores.length; i++) {
+        while (num >= valores[i]) {
+            num -= valores[i];
+            resultado += simbolos[i];
+        }
+    }
+    return resultado;
 }
 
-function arabicToRoman(arabic) {
+function romanoAArabigo(romano) {
+    const mapa = { I:1,V:5,X:10,L:50,C:100,D:500,M:1000 };
+    let total = 0, prev = 0;
+
+    for (let i = romano.length -1; i>=0; i--) {
+        const valor = mapa[romano[i].toUpperCase()];
+        if (!valor) throw new Error("Número romano inválido");
+        if (valor < prev) total -= valor;
+        else total += valor;
+        prev = valor;
+    }
+
+    return total;
 }
 
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Servidor de tateti escuchando en el puerto ${PORT}`);
-  });
-}
-
-
-module.exports = { app, romanToArabic, arabicToRoman };
+module.exports = { arabigoARomano, romanoAArabigo };
